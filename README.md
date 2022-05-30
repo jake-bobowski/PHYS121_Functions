@@ -129,3 +129,42 @@ fig = PHYS121.Scatter(theta, T, errT, 'initial angle' , 'period', 'degrees', 's'
 
 -----------------------------
 -----------------------------
+
+### MultiScatter...
+
+The function for generating multiple scatter plots on a single graph is called as follows:
+```python
+MultiScatter(DataArray, xlabel = 'x-axis', ylabel = 'y-axis', xUnits = '', yUnits = '')
+```
+The 'DataArray' input is required, all other arguments are optional with default values set.  The function returns the a single output (the formatted plot):
+```python
+fig
+```
+
+DataArray takes the form of nested lists: DataArray = [[x1, y1, dy1], [x2, y2], [x3, y3, dy3], ...], where x1, y1, dy1, x2, y2, ... are themselves lists.  Notice that each sublist ([x1, y1, dy1] or [x2, y2]) can be either two or three elements long.  If the sublist contains three elements, a scatter plot with error bars will be generated.  If the sublist contains only two elements, a scatter plot with no error bars will be generated.  'DataArray' can mix sublists with two and three elements.
+
+### MultiScatter Example Implmentation
+The code block below shows an implementation of 'MultiScatter'.
+```python
+import PHYS121
+V1 = [1, 2, 3, 4]
+I1 = [0.12, 0.198, 0.285, 0.412]
+errI1 = [0.005, 0.012, 0.020, 0.025]
+
+V2 = [1, 2, 3, 4, 5]
+I2 = [0.25, 0.31, 0.405, 0.602, .682]
+
+V3 = [1, 2, 3, 4]
+I3 = [0.05, 0.11, 0.155, 0.252]
+errI3 = [0.005, 0.012, 0.020, 0.025]
+
+V4 = np.array([1.5, 2.5, 3.5, 4.5])
+I4 = [0.05, -0.11, -0.155, -.23]
+
+DataArray = [[V1, I1, errI1], [V2, I2], [V3, I3, errI3], [V4, I4]]
+
+PHYS121.MultiScatter(DataArray, 'time', 'position', 's', 'cm');
+```
+
+-----------------------------
+-----------------------------

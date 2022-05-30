@@ -15,6 +15,8 @@ The following functions are currently aavailable:
 * Overlay multiple histograms
 * Generate multiple scatter plots on a single graph
 
+Example implementations of the various fuunctions are described below.  These examples are implmented in the Jupyter notebook file 'PHYD_121_Functions_demonstration.ipynb' provided in this repository.
+
 -----------------------------
 -----------------------------
 

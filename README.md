@@ -48,4 +48,25 @@ errI = [0.005, 0.012, 0.020, 0.025]
 m, b, dm, db, fig1 = PHYS121.LinearFitFunction(V, I, errI, 'voltage' , 'current', 'V', 'A', True)
 ```
 
-The two examples above are demonstrated in the code cells below.  The 'm, b, dm, db, fig = ...' syntax is used to store the function outputs in varibles.
+
+### Statistics...
+
+The statistics function is called as follows:
+```python
+Statistics(data, nbins = 10, xlabel = 'x-axis', xUnits = '', normalized = False)
+```
+The data input is required, all other arguments are optional with default values set.  The function returns the following outputs:
+```python
+counts, centres, average, stdDev, stdError, fig
+```
+The first two outputs are lists, the next three are numerical values, and 'fig' is the formatted plot. 
+
+The function calculates and reports the mean, standard deviation, and standard error of the provided data.  It also plots a histogram of the data.  
+
+### Statistics Example Implmentation
+The code block below shows an implementation of 'Statistics'.
+```python
+import PHYS121
+theta20a = [2.02, 1.93, 1.92, 1.96, 2.03, 2.03, 1.96, 2.03, 2.06, 2, 2.03, 2.12, 2.07, 1.99, 1.99, 1.95, 2.03, 2.12, 2.03, 2.09, 2.03, 2.03, 2.01, 2.04, 2.03, 2.04, 1.99, 1.99, 1.97, 1.98]
+cnts, ctrs, mean, stdDev, stdError, fig20a = PHYS121.Statistics(theta20a, 12, 'Period', 's', True);
+```

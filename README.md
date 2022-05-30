@@ -15,6 +15,9 @@ The following functions are currently aavailable:
 * Overlay multiple histograms
 * Generate multiple scatter plots on a single graph
 
+-----------------------------
+-----------------------------
+
 ### LinearFit...
 
 The linear-fit function is called as follows:
@@ -47,6 +50,9 @@ I = [0.12, 0.198, 0.285, 0.412]
 errI = [0.005, 0.012, 0.020, 0.025]
 m, b, dm, db, fig1 = PHYS121.LinearFitFunction(V, I, errI, 'voltage' , 'current', 'V', 'A', True)
 ```
+
+-----------------------------
+-----------------------------
 
 
 ### Statistics...
@@ -94,3 +100,6 @@ The code block below shows an implementation of 'HistOverlay'.
 import PHYS121
 cnts, ctrs, fig = PHYS121.HistOverlay([theta20a, theta20], 8, 'Period', 's', True, 0.75)
 ```
+
+-----------------------------
+-----------------------------

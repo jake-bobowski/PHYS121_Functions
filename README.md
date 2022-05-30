@@ -103,3 +103,29 @@ cnts, ctrs, fig = PHYS121.HistOverlay([theta20a, theta20], 8, 'Period', 's', Tru
 
 -----------------------------
 -----------------------------
+
+### Scatter...
+
+The function for generating scatter plots is called as follows:
+```python
+Scatter(xData, yData, yErrors = [], xlabel = 'x-axis', ylabel = 'y-axis', xUnits = '', yUnits = '', fill = False, show = True)
+```
+The 'xData' and 'yData' inputs are required, all other arguments are optional with default values set.  The function returns the a single output (the formatted plot):
+```python
+fig
+```
+
+The function will do a simple scatter plot if no 'yError' are included.  It will included error bars if 'yErrors' are passed to the function.  The 'fill' and 'show' arguments should generally be false.  They are used by the linear fit function which calls the scatter plot function to generate its graphs.  
+
+### Scatter Example Implmentation
+The code block below shows an implementation of 'Scatter'.
+```python
+import PHYS121
+theta = [10, 20, 30] # degrees
+T = [mean10, mean20, mean30] # s
+errT = [stdError10, stdError20, stdError30] # s
+fig = PHYS121.Scatter(theta, T, errT, 'initial angle' , 'period', 'degrees', 's')
+```
+
+-----------------------------
+-----------------------------

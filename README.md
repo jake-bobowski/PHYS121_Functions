@@ -70,3 +70,26 @@ import PHYS121
 theta20a = [2.02, 1.93, 1.92, 1.96, 2.03, 2.03, 1.96, 2.03, 2.06, 2, 2.03, 2.12, 2.07, 1.99, 1.99, 1.95, 2.03, 2.12, 2.03, 2.09, 2.03, 2.03, 2.01, 2.04, 2.03, 2.04, 1.99, 1.99, 1.97, 1.98]
 cnts, ctrs, mean, stdDev, stdError, fig20a = PHYS121.Statistics(theta20a, 12, 'Period', 's', True);
 ```
+
+-----------------------------
+
+### HistOverlay...
+
+The HistOverlay function is called as follows:
+```python
+HistOverlay(dataArray, nbins = 10, xlabel = 'x-axis', xUnits = '',  normalized = True, transparency = 0.75)
+```
+The dataArray (a list of lists) input is required, all other arguments are optional with default values set.  The function returns the following outputs:
+```python
+countsArray, centresArray, fig
+```
+The first two outputs are lists of lists and 'fig' is the formatted plot. 
+
+The dataArray is of the form dataArray = [[dataset1], [dataset2], ... [datasetN]].  The function plots the histograms of each of the datasets on a single graph.  If the normalized argument is True, then histogram is scaled such that the area under the distributions is 1.  This is a good option when comparing two different distribtuions.  The transparency argument (a number between 0 and 1) sets the transparency of each of the individual histograms.
+
+### HistOverlay Example Implmentation
+The code block below shows an implementation of 'HistOverlay'.
+```python
+import PHYS121
+cnts, ctrs, fig = PHYS121.HistOverlay([theta20a, theta20], 8, 'Period', 's', True, 0.75)
+```

@@ -88,7 +88,7 @@ def eParse(num, places):
 
 ###############################################################################
 # Producing Scatter Plots                                                     #
-# - modified 20220529                                                         #
+# - modified 20220530                                                         #
 ############################################################################### 
 # Start the 'Scatter' function.
 def Scatter(xData, yData, yErrors = [], xlabel = 'x-axis', ylabel = 'y-axis', xUnits = '', yUnits = '', fill = False, show = True):
@@ -167,7 +167,7 @@ def Scatter(xData, yData, yErrors = [], xlabel = 'x-axis', ylabel = 'y-axis', xU
 
 ###############################################################################
 # Produce Multiple Scatter Plots                                              #
-# - modified 20220529                                                         #
+# - modified 20220530                                                         #
 ############################################################################### 
 # Start the 'MultiScatter' function.
 def MultiScatter(DataArray, xlabel = 'x-axis', ylabel = 'y-axis', xUnits = '', yUnits = ''):
@@ -246,7 +246,7 @@ def MultiScatter(DataArray, xlabel = 'x-axis', ylabel = 'y-axis', xUnits = '', y
 
 ###############################################################################
 # Weighted & Unweighted Linear Fits                                           #
-# - modified 20220529                                                         #
+# - modified 20220530                                                         #
 ############################################################################### 
 # Start the 'LinearFitFunction' function.
 def LinearFit(xData, yData, yErrors = [], xlabel = 'x-axis', ylabel = 'y-axis', xUnits = '', yUnits = '', fill = False):
@@ -418,12 +418,14 @@ def Statistics(data, nbins = 10, xlabel = 'x-axis', xUnits = '', normalized = Fa
         from IPython.display import display, Latex
         if abs(power) < 3:        
             stdError = printStr(stdError, places - power)
+            display(Latex(f'$N = {len(data)}$.'))
             display(Latex(f'The average of the data is $\mu = {num}\, \mathrm{{ {xUnits} }}.$'))
             display(Latex(f'The standard deviation of the data is $\sigma = {stdDev}\, \mathrm{{ {xUnits} }}.$'))
             display(Latex(f'The standard error of the data is $\sigma_\mu = \sigma/\sqrt{{N}} = \mathrm{stdError}\, \mathrm{{ {xUnits} }}.$'))
         else:
             stdDevPrint = round(stdDev/10**power, places)
             stdErrorPrint = round(stdError/10**power, places)
+            display(Latex(f'$N = {len(data)}$.'))
             display(Latex(f'The average of the data is $\mu = {coeff}' + r'\times' +  f'10^{{ {power} }}\, \mathrm{{ {xUnits} }}.$'))
             display(Latex(f'The standard deviation of the data is $\sigma = {stdDevPrint}' + r'\times' + f'10^{{ {power} }}\, \mathrm{{ {xUnits} }}.$'))
             display(Latex(f'The standard error of the data is $\sigma_\mu = \sigma/\sqrt{{N}} = {stdErrorPrint}' + r'\times' + f'10^{{ {power} }}\, \mathrm{{ {xUnits} }}.$'))

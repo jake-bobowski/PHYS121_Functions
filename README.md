@@ -165,7 +165,7 @@ I4 = [0.05, -0.11, -0.155, -.23]
 
 DataArray = [[V1, I1, errI1], [V2, I2], [V3, I3, errI3], [V4, I4]]
 
-PHYS121.MultiScatter(DataArray, 'time', 'position', 's', 'cm');
+fig = PHYS121.MultiScatter(DataArray, 'time', 'position', 's', 'cm')
 ```
 
 -----------------------------

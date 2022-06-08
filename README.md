@@ -1,5 +1,5 @@
 # PHYS121_Functions
-- last updated May 29, 2022
+- last updated June 7, 2022
 
 Python functions written for use in the PHYS 121 lab at UBC Okanagan.
 
@@ -14,6 +14,7 @@ The following functions are currently aavailable:
 * Plot a histogram and generate basic statistics
 * Overlay multiple histograms
 * Generate multiple scatter plots on a single graph
+* Import and display an image with a figure caption
 
 Example implementations of the various fuunctions are described below.  These examples are implmented in the Jupyter notebook file 'PHYD_121_Functions_demonstration.ipynb' provided in this repository.
 
@@ -166,6 +167,36 @@ I4 = [0.05, -0.11, -0.155, -.23]
 DataArray = [[V1, I1, errI1], [V2, I2], [V3, I3, errI3], [V4, I4]]
 
 fig = PHYS121.MultiScatter(DataArray, 'time', 'position', 's', 'cm')
+```
+
+-----------------------------
+-----------------------------
+
+### ImportImage...
+
+The function for importing and displaying an image (with an optional caption) is called as follows:
+```python
+ImportImage(filename, caption = '', rotation = 0)
+```
+The 'filename' input is required.  The file name must be a string and it must have one of the following extentions:
+ - png
+ - jpg
+ - jpeg
+ - gif
+ - eps
+The figure file must also be located in the same directory as your working Jupyter Notebook file.
+
+All other arguments are optional with default values set.  The first optional argument is a caption for the figure and it must be a string.  The second optional argument is a numerical value (float or integer).  It is the amount to rotate the image in degrees.   The function returns the a single output (the formatted figure):
+```python
+fig
+```
+
+### ImportImage Example Implmentation
+The code block below shows an implementation of 'ImportImage'.
+```python
+import PHYS121
+caption = 'Here is some example caption text.'
+fig = PHYS121.ImportImage('pic.jpg', caption, -90)
 ```
 
 -----------------------------

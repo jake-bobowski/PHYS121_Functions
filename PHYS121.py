@@ -517,3 +517,33 @@ def HistOverlay(dataArray, nbins = 10, xlabel = 'x-axis', xUnits = '',  normaliz
         ax.set_aspect(1.0/ax.get_data_ratio(), adjustable='box') # Make the plot square
         plt.show()
     return countsArray, centresArray, fig
+
+
+###############################################################################
+# Import Image & Add a Caption                                                #
+# - modified 20220607                                                         #
+###############################################################################        
+# Start the 'Import Image' function.
+def ImportImage(filename, caption = '', rotation = 0):
+    from os.path import exists as file_exists
+    fig = ''
+    if filename.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.eps')) == False:
+        print('The file type must be one of the following: png, jpg, jpeg, gif, eps.')
+    elif file_exists(filename) == False:
+        print("The file '" + filename + "'does not exist.  Check the file name and ensure that it is in the same directory as your current Jupyter Notebook.")
+    elif isinstance(caption, str) == False:
+        print('The caption must be a string.')
+    elif "\\" in r"%r" % caption:
+        print(r"The caption cannot contain backslashes '\'.")
+    elif isinstance(rotation, (float, int)) == False:
+        print('The rotational angle must be a float or integer.  It represents the rotation angle in degrees.')
+    else:
+        from PIL import Image
+        fig = plt.figure(figsize=(5, 5), dpi=100) # create a square figure.
+        img = Image.open(filename) # Open the file
+        img = img.rotate(rotation, expand = 1) # Rotate the file.
+        plt.imshow(img)
+        plt.axis('off') # Remove the axes from the 'plot'.
+        plt.text(0, 4300,'%s' %caption, size = 14, color = "k") # Add the caption below the image.
+        plt.show() # Show the image.
+    return fig

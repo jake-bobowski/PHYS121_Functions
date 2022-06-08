@@ -10,6 +10,19 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import cm # used to generate a sequence of colours for plotting
 from scipy.optimize import curve_fit
+from IPython.display import HTML as html_print
+from IPython.display import display, Markdown, Latex
+
+
+
+###############################################################################
+# For printing outputs in colour (copied from Stack Overflow)                 #
+# - modified 20220607                                                         #
+############################################################################### 
+# Start the 'cstr' function.
+def cstr(s, color = 'black'):
+    return "<text style=color:{}>{}</text>".format(color, s)
+
 
 ###############################################################################
 # Force a Float to be Printed w/o using Scientific Notation                   #
@@ -95,29 +108,29 @@ def Scatter(xData, yData, yErrors = [], xlabel = 'x-axis', ylabel = 'y-axis', xU
     fig = ''
     # Check that the lengths of the inputs are all the same.  Check that the other inputs are strings.
     if len(xData) != len(yData):
-        print('The length of xData (' + str(len(xData)) + ') is not equal to the length of yData (' + str(len(yData)) + ').')
+        display(html_print(cstr('The length of xData (' + str(len(xData)) + ') is not equal to the length of yData (' + str(len(yData)) + ').', color = 'magenta')))
     elif all(isinstance(x, (int, float)) for x in xData) != True: # Is dataArray a list of lists or arrays?
-        print("The elements of 'xData' must be integers or floats.")
+        display(html_print(cstr("The elements of 'xData' must be integers or floats.", color = 'magenta')))
     elif all(isinstance(x, (int, float)) for x in yData) != True: # Is dataArray a list of lists or arrays?
-        print("The elements of 'yData' must be integers or floats.")
+        display(html_print(cstr("The elements of 'yData' must be integers or floats.", color = 'magenta')))
     elif len(yErrors) != 0 and all(isinstance(x, (int, float)) for x in yErrors) != True: # Is dataArray a list of lists or arrays?
-        print("The elements of 'yErrors' must be integers or floats.")
+        display(html_print(cstr("The elements of 'yErrors' must be integers or floats.", color = 'magenta')))
     elif len(yErrors) != 0 and len(xData) != len(yErrors):  
-        print('The length of xData (' + str(len(xData)) + ') is not equal to the length of yErrors (' + str(len(yErrors)) + ').')
+        display(html_print(cstr('The length of xData (' + str(len(xData)) + ') is not equal to the length of yErrors (' + str(len(yErrors)) + ').', color = 'magenta')))
     elif len(yErrors) != 0 and len(yData) != len(yErrors):  
-        print('The length of yData (' + str(len(yData)) + ') is not equal to the length of yErrors (' + str(len(yErrors)) + ').')
+        display(html_print(cstr('The length of yData (' + str(len(yData)) + ') is not equal to the length of yErrors (' + str(len(yErrors)) + ').', color = 'magenta')))
     elif isinstance(xlabel, str) == False:
-        print("'xlabel' must be a string.")
+        display(html_print(cstr("'xlabel' must be a string.", color = 'magenta')))
     elif isinstance(ylabel, str) == False:
-        print("'ylabel' must be a string.")
+        display(html_print(cstr("'ylabel' must be a string.", color = 'magenta')))
     elif isinstance(xUnits, str) == False:
-        print("'xUnits' must be a string.")
+        display(html_print(cstr("'xUnits' must be a string.", color = 'magenta')))
     elif isinstance(yUnits, str) == False:
-        print("'yUnits' must be a string.")
+        display(html_print(cstr("'yUnits' must be a string.", color = 'magenta')))
     elif fill != True and fill != False:
-        print("The 'fill' parameter must be set to either True or False.")
+        display(html_print(cstr("The 'fill' parameter must be set to either True or False.", color = 'magenta')))
     elif show != True and show != False:
-        print("The 'show' parameter must be set to either True or False.")
+        display(html_print(cstr("The 'show' parameter must be set to either True or False.", color = 'magenta')))
     else:
         fig = plt.figure(figsize=(5, 5), dpi=100) # create a square figure.
         ax = fig.add_subplot(111)
@@ -174,32 +187,32 @@ def MultiScatter(DataArray, xlabel = 'x-axis', ylabel = 'y-axis', xUnits = '', y
     fig = ''
     # Check that the lengths of the inputs are all the same.  Check that the other inputs are strings.
     if len(DataArray) == 0:
-        print("The 'DataArray' list must not be empty.")
+        display(html_print(cstr("The 'DataArray' list must not be empty.", color = 'magenta')))
     elif all(isinstance(x, list) or type(x).__module__ == np.__name__ for x in DataArray) != True: # Is dataArray a list of lists or arrays?
-        print("The 'DataArray' must be a list of lists.")
+        display(html_print(cstr("The 'DataArray' must be a list of lists.", color = 'magenta')))
     elif isinstance(xlabel, str) == False:
-        print("'xlabel' must be a string.")
+        display(html_print(cstr("'xlabel' must be a string.", color = 'magenta')))
     elif isinstance(ylabel, str) == False:
-        print("'ylabel' must be a string.")
+        display(html_print(cstr("'ylabel' must be a string.", color = 'magenta')))
     elif isinstance(xUnits, str) == False:
-        print("'xUnits' must be a string.")
+        display(html_print(cstr("'xUnits' must be a string.", color = 'magenta')))
     elif isinstance(yUnits, str) == False:
-        print("'yUnits' must be a string.")
+        display(html_print(cstr("'yUnits' must be a string.", color = 'magenta')))
     else:
         for i in range(len(DataArray)):
             if len(DataArray[i]) != 2 and len(DataArray[i]) != 3:
-                print('The elements of DataArray must be lists of length 2 or 3.  Element', i + 1, 'does not satisfy this requirement.')
+                display(html_print(cstr("The elements of 'DataArray' must be lists of length 2 or 3.  Element " + str(i + 1) + ' does not satisfy this requirement.', color = 'magenta')))
                 return fig
             elif all(isinstance(x, list) or type(x).__module__ == np.__name__ for x in DataArray[i]) != True: # Is dataArray a list of lists or arrays?
-                print("The elements of 'DataArray' must be a list of lists.  Element", i + 1, 'does not satisfy this requirement.')
+                display(html_print(cstr("The elements of 'DataArray' must be a list of lists.  Element " +  str(i + 1) + ' does not satisfy this requirement.', color = 'magenta')))
                 return fig
             elif len(DataArray[i]) == 2:
                 if len(DataArray[i][0]) != len(DataArray[i][1]):
-                    print("In element", i + 1, "of 'DataArray', the x- and y-datasets are different lengths.")
+                    display(html_print(cstr("In element " + str(i + 1) + " of 'DataArray', the x- and y-datasets are different lengths.", color = 'magenta')))
                     return fig
                 elif len(DataArray[i]) == 3:
                     if len(DataArray[i][0]) != len(DataArray[i][1]) or len(DataArray[i][0]) != len(DataArray[i][2]):
-                        print("In element", i + 1, "of 'DataArray', the x- y-, and y-error datasets are different lengths.")
+                        display(html_print(cstr("In element " + str(i + 1) + " of 'DataArray', the x- y-, and y-error datasets are different lengths.", color = 'magenta')))
                         return fig
         if  type(DataArray).__module__ == np.__name__: # Check to see if DataArray is an array.  If it is, convert to a list.
             DataArray = DataArray.tolist()
@@ -212,7 +225,7 @@ def MultiScatter(DataArray, xlabel = 'x-axis', ylabel = 'y-axis', xUnits = '', y
         # Convert DataArray to a single master list
         masterList = sum(sum(DataArray,[]),[])
         if all(isinstance(x, (int, float)) for x in masterList) != True:
-            print('All elements of x- and y-data and y-errors must be integers or floats.')
+            display(html_print(cstr('All elements of x- and y-data and y-errors must be integers or floats.', color = 'magenta')))
             return fig
         
         fig = plt.figure(figsize=(5, 5), dpi=100) # create a square figure.       
@@ -264,27 +277,27 @@ def LinearFit(xData, yData, yErrors = [], xlabel = 'x-axis', ylabel = 'y-axis', 
         yErrors = yErrors.tolist()
     # Check that the lengths of the inputs are all the same.  Check that the other inputs are strings.
     if len(xData) != len(yData):
-        print('The length of xData (' + str(len(xData)) + ') is not equal to the length of yData (' + str(len(yData)) + ').')
+        display(html_print(cstr('The length of xData (' + str(len(xData)) + ') is not equal to the length of yData (' + str(len(yData)) + ').', color = 'magenta')))
     elif len(yErrors) != 0 and len(xData) != len(yErrors):  
-        print('The length of xData (' + str(len(xData)) + ') is not equal to the length of yErrors (' + str(len(yErrors)) + ').')
+        display(html_print(cstr('The length of xData (' + str(len(xData)) + ') is not equal to the length of yErrors (' + str(len(yErrors)) + ').', color = 'magenta')))
     elif len(yErrors) != 0 and len(yData) != len(yErrors):  
-        print('The length of yData (' + str(len(yData)) + ') is not equal to the length of yErrors (' + str(len(yErrors)) + ').')
+        display(html_print(cstr('The length of yData (' + str(len(yData)) + ') is not equal to the length of yErrors (' + str(len(yErrors)) + ').', color = 'magenta')))
     elif all(isinstance(x, (int, float)) for x in xData) != True:
-        print("The elements of 'xData' must be integers or floats.")
+        display(html_print(cstr("The elements of 'xData' must be integers or floats.", color = 'magenta')))
     elif all(isinstance(x, (int, float)) for x in yData) != True:
-        print("The elements of 'yData' must be integers or floats.")
+        display(html_print(cstr("The elements of 'yData' must be integers or floats.", color = 'magenta')))
     elif len(yErrors) != 0 and all(isinstance(x, (int, float)) for x in yErrors) != True:
-        print("The elements of 'yErrors' must be integers or floats.")
+        display(html_print(cstr("The elements of 'yErrors' must be integers or floats.", color = 'magenta')))
     elif isinstance(xlabel, str) == False:
-        print("'xlabel' must be a string.")
+        display(html_print(cstr("'xlabel' must be a string.", color = 'magenta')))
     elif isinstance(ylabel, str) == False:
-        print("'ylabel' must be a string.")
+        display(html_print(cstr("'ylabel' must be a string.", color = 'magenta')))
     elif isinstance(xUnits, str) == False:
-        print("'xUnits' must be a string.")
+        display(html_print(cstr("'xUnits' must be a string.", color = 'magenta')))
     elif isinstance(yUnits, str) == False:
-        print("'yUnits' must be a string.")
+        display(html_print(cstr("'yUnits' must be a string.", color = 'magenta')))
     elif fill != True and fill != False:
-        print("The 'fill' parameter must be set to either True or False.")
+        display(html_print(cstr("The 'fill' parameter must be set to either True or False.", color = 'magenta')))
     else:
         # Uncertainties is a nice package that can be used to properly round
         # a numerical value based on its associated uncertainty.
@@ -298,7 +311,6 @@ def LinearFit(xData, yData, yErrors = [], xlabel = 'x-axis', ylabel = 'y-axis', 
         
         # If the yErrors list is empty, do an unweighted fit.  Otherwise, do a weighted fit.
         print('')
-        from IPython.display import display, Markdown
         if len(yErrors) == 0: 
             a_fit, cov = curve_fit(linearFunc, xData, yData)
             display(Markdown('This is an **UNWEIGHTED** fit.'))
@@ -372,17 +384,17 @@ def Statistics(data, nbins = 10, xlabel = 'x-axis', xUnits = '', normalized = Fa
     stdError = ''
     fig = ''
     if len(data)==0:
-        print("The 'data' list must not be empty.")
+        display(html_print(cstr("The 'data' list must not be empty.", color = 'magenta')))
     elif all(isinstance(x, (int, float)) for x in data) != True:
-        print("All elements of the 'data' list must be floats or integers.")
+        display(html_print(cstr("All elements of the 'data' list must be floats or integers.", color = 'magenta')))
     elif isinstance(nbins, int) == False or nbins < 0:
-        print("'nbins' must be a positive integer.")
+        display(html_print(cstr("'nbins' must be a positive integer.", color = 'magenta')))
     elif isinstance(xlabel, str) == False:
-        print("'xlabel' must be a string.")
+        display(html_print(cstr("'xlabel' must be a string.", color = 'magenta')))
     elif isinstance(xUnits, str) == False:
-        print("'xUnits' must be a string.")
+        display(html_print(cstr("'xUnits' must be a string.", color = 'magenta')))
     elif normalized != True and normalized != False:
-        print("The 'normalized' parameter must be set to either True or False.")
+        display(html_print(cstr("The 'normalized' parameter must be set to either True or False.", color = 'magenta')))
     else:
         # Determine the boundaries of the various histogram bins.
         binwidth = (np.max(data) - np.min(data))/nbins
@@ -415,7 +427,6 @@ def Statistics(data, nbins = 10, xlabel = 'x-axis', xUnits = '', normalized = Fa
         print('')
         
         # Display some nicely-formatted results
-        from IPython.display import display, Latex
         if abs(power) < 3:        
             stdError = printStr(stdError, places - power)
             display(Latex(f'$N = {len(data)}$.'))
@@ -456,21 +467,21 @@ def HistOverlay(dataArray, nbins = 10, xlabel = 'x-axis', xUnits = '',  normaliz
     centresArray = ''
     fig = ''
     if len(dataArray)==0:
-        print("The 'dataArray' list must not be empty.")
+        display(html_print(cstr("The 'dataArray' list must not be empty.", color = 'magenta')))
     elif all(isinstance(x, list) or type(x).__module__ == np.__name__ for x in dataArray) != True: # Is dataArray a list of lists or arrays?
-        print("The 'dataArray' must be a list of lists.")
+        display(html_print(cstr("The 'dataArray' must be a list of lists.", color = 'magenta')))
     elif isinstance(nbins, int) == False or nbins < 0:
-        print("'nbins' must be a positive integer.")
+        display(html_print(cstr("'nbins' must be a positive integer.", color = 'magenta')))
     elif isinstance(xlabel, str) == False:
-        print("'xlabel' must be a string.")
+        display(html_print(cstr("'xlabel' must be a string.", color = 'magenta')))
     elif isinstance(xUnits, str) == False:
-        print("'xUnits' must be a string.")
+        display(html_print(cstr("'xUnits' must be a string.", color = 'magenta')))
     elif normalized != True and normalized != False:
-        print("The 'normalized' parameter must be set to either True or False.")
+        display(html_print(cstr("The 'normalized' parameter must be set to either True or False.", color = 'magenta')))
     elif isinstance(transparency, int) == False and isinstance(transparency, float) == False:
-        print("The 'transparency' parameter must be a number between 0 (completely transparent) and 1 (opaque).")
+        display(html_print(cstr("The 'transparency' parameter must be a number between 0 (completely transparent) and 1 (opaque).", color = 'magenta')))
     elif transparency < 0 or transparency > 1:
-        print("The 'transparency' parameter must be a number between 0 (completely transparent) and 1 (opaque).")
+        display(html_print(cstr("The 'transparency' parameter must be a number between 0 (completely transparent) and 1 (opaque).", color = 'magenta')))
     else:
         # Check to see if dataArray is a numpy array.  It it is, convert to a list.
         if  type(dataArray).__module__ == np.__name__:
@@ -483,7 +494,7 @@ def HistOverlay(dataArray, nbins = 10, xlabel = 'x-axis', xUnits = '',  normaliz
         colour = iter(cm.rainbow(np.linspace(0, 1, len(dataArray))))
         tot = sum(dataArray, []) # Combine the list of lists into a single large list
         if all(isinstance(x, (int, float)) for x in tot) != True:
-            print('All elements of the provided data must be integers or floats.')
+            display(html_print(cstr('All elements of the provided data must be integers or floats.', color = 'magenta')))
             return countsArray, centresArray, fig
         # Calculate the boundaries of the histogram bins
         binwidth = (np.max(tot) - np.min(tot))/nbins
@@ -528,15 +539,15 @@ def ImportImage(filename, caption = '', rotation = 0):
     from os.path import exists as file_exists
     fig = ''
     if filename.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.eps')) == False:
-        print('The file type must be one of the following: png, jpg, jpeg, gif, eps.')
+        display(html_print(cstr('The file type must be one of the following: png, jpg, jpeg, gif, eps.', color = 'magenta')))
     elif file_exists(filename) == False:
-        print("The file '" + filename + "'does not exist.  Check the file name and ensure that it is in the same directory as your current Jupyter Notebook.")
+        display(html_print(cstr("The file '" + filename + "'does not exist.  Check the file name and ensure that it is in the same directory as your current Jupyter Notebook.", color = 'magenta')))
     elif isinstance(caption, str) == False:
-        print('The caption must be a string.')
+        display(html_print(cstr('The caption must be a string.', color = 'magenta')))
     elif "\\" in r"%r" % caption:
-        print(r"The caption cannot contain backslashes '\'.")
+        display(html_print(cstr(r"The caption cannot contain backslashes '\'.", color = 'magenta')))
     elif isinstance(rotation, (float, int)) == False:
-        print('The rotational angle must be a float or integer.  It represents the rotation angle in degrees.')
+        display(html_print(cstr('The rotational angle must be a float or integer.  It represents the rotation angle in degrees.', color = 'magenta')))
     else:
         from PIL import Image
         fig = plt.figure(figsize=(5, 5), dpi=100) # create a square figure.

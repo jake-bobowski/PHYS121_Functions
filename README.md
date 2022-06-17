@@ -1,9 +1,9 @@
 # PHYS121_Functions
-- last updated June 7, 2022
-
-Python functions written for use in the PHYS 121 lab at UBC Okanagan.
+- last updated June 16, 2022
 
 Note that the Jupyter Notebook included in this repository (LinearFitFunction_demonstration.ipynb) makes use of a module called 'data_entry' which was written by Dr. Carl Michal from UBC.  The original source code for the module (data_entry.py) can be found here: https://phas.ubc.ca/~michal/data_entry.py.
+
+Python functions written for use in the PHYS 121 lab at UBC Okanagan.
 
 To use the functions described below, place the PHYS121.py file in the same directory as your main Python code.  Then import PHYS121 using:
 ```python

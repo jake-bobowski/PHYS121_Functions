@@ -1,7 +1,7 @@
 # PHYS121_Functions
-- last updated June 16, 2022
+- last updated June 21, 2022
 
-Note that the Jupyter Notebook included in this repository (LinearFitFunction_demonstration.ipynb) makes use of a module called 'data_entry' which was written by Dr. Carl Michal from UBC.  The original source code for the module (data_entry.py) can be found here: https://phas.ubc.ca/~michal/data_entry.py.
+Note that the Jupyter Notebook included in this repository (LinearFitFunction_demonstration.ipynb) makes use of a module called 'data_entry' (accessed via PHYS121.py) which was written by Dr. Carl Michal from UBC.  The original source code for the module (data_entry.py) can be found here: https://phas.ubc.ca/~michal/data_entry.py.
 
 Python functions written for use in the PHYS 121 lab at UBC Okanagan.
 
@@ -13,10 +13,12 @@ import PHYS121
 The following functions are currently aavailable:
 * Generate scatter plots
 * Weighted and unweighted linear fits
+* Weighted and unweighted power law fits
 * Plot a histogram and generate basic statistics
 * Overlay multiple histograms
 * Generate multiple scatter plots on a single graph
 * Import and display an image with a figure caption
+* Data entry using a spreadsheet-like envirnoment
 
 Example implementations of the various fuunctions are described below.  These examples are implmented in the Jupyter notebook file 'PHYD_121_Functions_demonstration.ipynb' provided in this repository.
 
@@ -59,6 +61,23 @@ m, b, dm, db, fig1 = PHYS121.LinearFitFunction(V, I, errI, 'voltage' , 'current'
 -----------------------------
 -----------------------------
 
+### Spreadsheet
+
+First, we introduce a very useful fuction called 'Spreadsheet'.  This function uses the 'data_entry' module which was written by Carl Michal, a physicist from UBC's Vancouver campus.  The original source code can be found here: https://www.phas.ubc.ca/~michal/data_entry.py.
+
+The data_entry function allows you to enter data into a spreadsheet-like environment.  The function will also generate vectors from the columns of data which can then be used to process the data (calculations, plotting, fitting, etc.).  Once a table to data has been entered, a file of column separated values (csv file) will be created in the same directory as the working Jupyter Notebook.  Once this file has been created, the spreadsheet will be auto-populated if the csv file is called using data_entry.
+
+To use Spreadsheet, the files PHYS121.py and data_entry.py must be in the same directory as the working Jupyter Notebook.  
+
+Here is an example implemntation of Spreadsheet:
+```python
+import numpy as np
+import PHYS121
+de = PHYS121.Spreadsheet("example")
+```
+
+-----------------------------
+-----------------------------
 
 ### Statistics...
 

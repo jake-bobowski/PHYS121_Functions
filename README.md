@@ -14,6 +14,7 @@ The following functions are currently aavailable:
 * Generate scatter plots
 * Weighted and unweighted linear fits
 * Weighted and unweighted power law fits
+* Weighted and unweighted $RC$-charging fits
 * Plot a histogram and generate basic statistics
 * Overlay multiple histograms
 * Generate multiple scatter plots on a single graph

@@ -375,15 +375,17 @@ def LinearFit(xData, yData, yErrors = [], xlabel = 'x-axis', ylabel = 'y-axis', 
         
 ###############################################################################
 # Weighted & Unweighted Power Law Fits                                        #
-# - modified 20220621                                                         #
+# - modified 20220705                                                         #
 ############################################################################### 
 # Start the 'PowerLaw' function.
 def PowerLaw(xData, yData, yErrors = [], xlabel = 'x-axis', ylabel = 'y-axis', xUnits = '', yUnits = ''):
     # Check to see if the elements of dataArray are numpy arrays.  If they are, convert to lists
-    Slope = ''
-    Yintercept = ''
-    errSlope = ''
-    errYintercept = ''
+    Coeff = ''
+    Power = ''
+    Offset = ''
+    errCoeff = ''
+    errPower = ''
+    errOffset = ''
     fig = ''
     if  type(xData).__module__ == np.__name__:
         xData = xData.tolist()
@@ -497,6 +499,124 @@ def PowerLaw(xData, yData, yErrors = [], xlabel = 'x-axis', ylabel = 'y-axis', x
         # Show the final plot.
         plt.show()
     return Coeff, Power, Offset, errCoeff, errPower, errOffset, fig
+
+
+
+###############################################################################
+# Weighted & Unweighted RC Charing Fits                                       #
+# - modified 20220705                                                         #
+############################################################################### 
+# Start the 'Charging' function.
+def Charging(xData, yData, yErrors = [], xlabel = 'x-axis', ylabel = 'y-axis', xUnits = '', yUnits = ''):
+    # Check to see if the elements of dataArray are numpy arrays.  If they are, convert to lists
+    V0_fit = ''
+    tau_fit = ''
+    errV0 = ''
+    errTau = ''
+    fig = ''
+    if  type(xData).__module__ == np.__name__:
+        xData = xData.tolist()
+    if  type(yData).__module__ == np.__name__:
+        yData = yData.tolist()
+    if  type(yErrors).__module__ == np.__name__:
+        yErrors = yErrors.tolist()
+    # Check that the lengths of the inputs are all the same.  Check that the other inputs are strings.
+    if len(xData) != len(yData):
+        display(html_print(cstr('The length of xData (' + str(len(xData)) + ') is not equal to the length of yData (' + str(len(yData)) + ').', color = 'magenta')))
+    elif len(yErrors) != 0 and len(xData) != len(yErrors):  
+        display(html_print(cstr('The length of xData (' + str(len(xData)) + ') is not equal to the length of yErrors (' + str(len(yErrors)) + ').', color = 'magenta')))
+    elif len(yErrors) != 0 and len(yData) != len(yErrors):  
+        display(html_print(cstr('The length of yData (' + str(len(yData)) + ') is not equal to the length of yErrors (' + str(len(yErrors)) + ').', color = 'magenta')))
+    elif all(isinstance(x, (int, float)) for x in xData) != True:
+        display(html_print(cstr("The elements of 'xData' must be integers or floats.", color = 'magenta')))
+    elif all(isinstance(x, (int, float)) for x in yData) != True:
+        display(html_print(cstr("The elements of 'yData' must be integers or floats.", color = 'magenta')))
+    elif len(yErrors) != 0 and all(isinstance(x, (int, float)) for x in yErrors) != True:
+        display(html_print(cstr("The elements of 'yErrors' must be integers or floats.", color = 'magenta')))
+    elif isinstance(xlabel, str) == False:
+        display(html_print(cstr("'xlabel' must be a string.", color = 'magenta')))
+    elif isinstance(ylabel, str) == False:
+        display(html_print(cstr("'ylabel' must be a string.", color = 'magenta')))
+    elif isinstance(xUnits, str) == False:
+        display(html_print(cstr("'xUnits' must be a string.", color = 'magenta')))
+    elif isinstance(yUnits, str) == False:
+        display(html_print(cstr("'yUnits' must be a string.", color = 'magenta')))
+    else:
+        # Uncertainties is a nice package that can be used to properly round
+        # a numerical value based on its associated uncertainty.
+        install_and_import('uncertainties') # check to see if uncertainties is installed.  If it isn't attempt to do the install
+        import uncertainties
+
+        # Define the linear function used for the fit.
+        def Charging(x, V0, tau):
+            y = V0*(1 - np.exp(-x/tau))
+            return y
+        
+        # If the yErrors list is empty, do an unweighted fit.  Otherwise, do a weighted fit.
+        print('')
+        display(Markdown('$y = V_0(1 - e^{-x/ \\tau})$'))
+    
+        if len(yErrors) == 0: 
+            a_fit, cov = curve_fit(Charging, xData, yData)
+            display(Markdown('This is an **UNWEIGHTED** fit.'))
+        else:
+            a_fit, cov = curve_fit(Charging, xData, yData, sigma = yErrors)
+            display(Markdown('This is a **WEIGHTED** fit.'))
+
+        V0_fit = a_fit[0]
+        errV0 = np.sqrt(np.diag(cov))[0]
+        tau_fit = a_fit[1]
+        errTau = np.sqrt(np.diag(cov))[1]
+        
+        # Use the 'uncertainties' package to format the best-fit parameters and the corresponding uncertainties.
+        V0 = uncertainties.ufloat(V0_fit, errV0)
+        tau = uncertainties.ufloat(tau_fit, errTau)
+
+        # Make a formatted table that reports the best-fit parameters and their uncertainties        
+        import pandas as pd
+        if xUnits != '' and yUnits != '':
+#            my_dict = {'coefficient' :{'':'$A =$', 'Value': '{:0.2ug}'.format(A), 'Units': yUnits + '/' + xUnits + eval(r'"\u00b' + str(Power) + '"')},
+#                       'power':{'':'$N =$', 'Value': '{:0.2ug}'.format(N), 'Units': ''},
+#                       'offset':{'':'$C =$', 'Value': '{:0.2ug}'.format(C), 'Units': yUnits}}
+            my_dict = {'equilibrium voltage' :{'':'$V_0 =$', 'Value': '{:0.2ug}'.format(V0), 'Units': yUnits},
+                       'time constant':{'':'$\tau =$', 'Value': '{:0.2ug}'.format(tau), 'Units': xUnits}}
+        elif xUnits != '' and yUnits == '':
+            my_dict = {'equilibrium voltage' :{'':'$V_0 =$', 'Value': '{:0.2ug}'.format(V0), 'Units': yUnits},
+                       'time constant':{'':'$\tau =$', 'Value': '{:0.2ug}'.format(tau), 'Units': xUnits}}       
+        elif xUnits == '' and yUnits != '':
+            my_dict = {'equilibrium voltage' :{'':'$V_0 =$', 'Value': '{:0.2ug}'.format(V0), 'Units': yUnits},
+                       'time constant':{'':'$\tau =$', 'Value': '{:0.2ug}'.format(tau), 'Units': xUnits}}
+        else:
+            my_dict = {'equilibrium voltage' :{'':'$V_0 =$', 'Value': '{:0.2ug}'.format(V0)},
+                       'time constant':{'':'$\tau =$', 'Value': '{:0.2ug}'.format(tau)}}
+
+        # Display the table
+        df = pd.DataFrame(my_dict)
+        display(df.transpose())
+        
+        # Generate the best-fit line. 
+        #fitFcn = np.polynomial.Polynomial(a_fit)
+        
+        # Call the Scatter function to create a scatter plot.
+        fig = Scatter(xData, yData, yErrors, xlabel, ylabel, xUnits, yUnits, False, False)
+        
+        # Determine the x-range.  Used to determine the x-values needed to produce the best-fit line.
+        if np.min(xData) > 0:
+            xmin = 0.9*np.min(xData)
+        else:
+            xmin = 1.1*np.min(xData)
+        if np.max(xData) > 0:
+            xmax = 1.1*np.max(xData)
+        else:
+            xmax = 0.9*np.max(xData)
+
+        # Plot the best-fit line...
+        xx = np.arange(xmin, xmax, (xmax-xmin)/5000)
+        plt.plot(xx, V0_fit*(1 - np.exp(-xx/tau_fit)), 'k-')
+
+        # Show the final plot.
+        plt.show()
+    return V0_fit, tau_fit, errV0, errTau, fig
     
     
         

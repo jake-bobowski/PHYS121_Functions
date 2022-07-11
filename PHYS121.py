@@ -504,7 +504,7 @@ def PowerLaw(xData, yData, yErrors = [], xlabel = 'x-axis', ylabel = 'y-axis', x
 
 ###############################################################################
 # Weighted & Unweighted RC Charing Fits                                       #
-# - modified 20220705                                                         #
+# - modified 20220711                                                         #
 ############################################################################### 
 # Start the 'Charging' function.
 def Charging(xData, yData, yErrors = [], xlabel = 'x-axis', ylabel = 'y-axis', xUnits = '', yUnits = ''):
@@ -548,7 +548,7 @@ def Charging(xData, yData, yErrors = [], xlabel = 'x-axis', ylabel = 'y-axis', x
         import uncertainties
 
         # Define the linear function used for the fit.
-        def Charging(x, V0, tau):
+        def ChargingFcn(x, V0, tau):
             y = V0*(1 - np.exp(-x/tau))
             return y
         
@@ -557,10 +557,10 @@ def Charging(xData, yData, yErrors = [], xlabel = 'x-axis', ylabel = 'y-axis', x
         display(Markdown('$y = V_0(1 - e^{-x/ \\tau})$'))
     
         if len(yErrors) == 0: 
-            a_fit, cov = curve_fit(Charging, xData, yData)
+            a_fit, cov = curve_fit(ChargingFcn, xData, yData)
             display(Markdown('This is an **UNWEIGHTED** fit.'))
         else:
-            a_fit, cov = curve_fit(Charging, xData, yData, sigma = yErrors)
+            a_fit, cov = curve_fit(ChargingFcn, xData, yData, sigma = yErrors)
             display(Markdown('This is a **WEIGHTED** fit.'))
 
         V0_fit = a_fit[0]
@@ -618,6 +618,119 @@ def Charging(xData, yData, yErrors = [], xlabel = 'x-axis', ylabel = 'y-axis', x
         plt.show()
     return V0_fit, tau_fit, errV0, errTau, fig
     
+
+###############################################################################
+# Magnetic Braking Nonlinear Fits                                       #
+# - modified 20220710                                                         #
+############################################################################### 
+# Start the 'Braking' function.
+def Braking(xData, yData, yErrors = [], xlabel = 'x-axis', ylabel = 'y-axis', xUnits = '', yUnits = ''):
+    # Check to see if the elements of dataArray are numpy arrays.  If they are, convert to lists
+    vterm = ''
+    tau = ''
+    errvterm = ''
+    errtau = ''
+    fig = ''
+    if  type(xData).__module__ == np.__name__:
+        xData = xData.tolist()
+    if  type(yData).__module__ == np.__name__:
+        yData = yData.tolist()
+    if  type(yErrors).__module__ == np.__name__:
+        yErrors = yErrors.tolist()
+    # Check that the lengths of the inputs are all the same.  Check that the other inputs are strings.
+    if len(xData) != len(yData):
+        display(html_print(cstr('The length of xData (' + str(len(xData)) + ') is not equal to the length of yData (' + str(len(yData)) + ').', color = 'magenta')))
+    elif len(yErrors) != 0 and len(xData) != len(yErrors):  
+        display(html_print(cstr('The length of xData (' + str(len(xData)) + ') is not equal to the length of yErrors (' + str(len(yErrors)) + ').', color = 'magenta')))
+    elif len(yErrors) != 0 and len(yData) != len(yErrors):  
+        display(html_print(cstr('The length of yData (' + str(len(yData)) + ') is not equal to the length of yErrors (' + str(len(yErrors)) + ').', color = 'magenta')))
+    elif all(isinstance(x, (int, float)) for x in xData) != True:
+        display(html_print(cstr("The elements of 'xData' must be integers or floats.", color = 'magenta')))
+    elif all(isinstance(x, (int, float)) for x in yData) != True:
+        display(html_print(cstr("The elements of 'yData' must be integers or floats.", color = 'magenta')))
+    elif len(yErrors) != 0 and all(isinstance(x, (int, float)) for x in yErrors) != True:
+        display(html_print(cstr("The elements of 'yErrors' must be integers or floats.", color = 'magenta')))
+    elif isinstance(xlabel, str) == False:
+        display(html_print(cstr("'xlabel' must be a string.", color = 'magenta')))
+    elif isinstance(ylabel, str) == False:
+        display(html_print(cstr("'ylabel' must be a string.", color = 'magenta')))
+    elif isinstance(xUnits, str) == False:
+        display(html_print(cstr("'xUnits' must be a string.", color = 'magenta')))
+    elif isinstance(yUnits, str) == False:
+        display(html_print(cstr("'yUnits' must be a string.", color = 'magenta')))
+    else:
+        # Uncertainties is a nice package that can be used to properly round
+        # a numerical value based on its associated uncertainty.
+        install_and_import('uncertainties') # check to see if uncertainties is installed.  If it isn't attempt to do the install
+        import uncertainties
+
+        # Define the linear function used for the fit.
+        def BrakingFcn(x, tau, vterm):
+            y = vterm*tau*((x/tau) - 1 + np.exp(-x/tau))
+            return y
+        
+        # If the yErrors list is empty, do an unweighted fit.  Otherwise, do a weighted fit.
+        print('')
+        display(Markdown('$y = v_\mathrm{T}\\tau\left[\dfrac{x}{\\tau} - 1 + e^{-x/ \\tau}\\right]$'))
+
+        if len(yErrors) == 0: 
+            a_fit, cov = curve_fit(BrakingFcn, xData, yData)
+            display(Markdown('This is an **UNWEIGHTED** fit.'))
+        else:
+            a_fit, cov = curve_fit(BrakingFcn, xData, yData, sigma = yErrors)
+            display(Markdown('This is a **WEIGHTED** fit.'))
+
+        Vterm = a_fit[1]
+        errVterm = np.sqrt(np.diag(cov))[1]
+        Tau = a_fit[0]
+        errTau = np.sqrt(np.diag(cov))[0]
+
+        # Use the 'uncertainties' package to format the best-fit parameters and the corresponding uncertainties.
+        v = uncertainties.ufloat(Vterm, errVterm)
+        T = uncertainties.ufloat(Tau, errTau)
+
+        # Make a formatted table that reports the best-fit parameters and their uncertainties        
+        import pandas as pd
+        if xUnits != '' and yUnits != '':
+            my_dict = {'Terminal Velocity' :{'':'$v_\mathrm{t} =$', 'Value': '{:0.2ug}'.format(v), 'Units': yUnits + '/' + xUnits},
+                       'Time Constant':{'':'$\tau =$', 'Value': '{:0.2ug}'.format(T), 'Units': yUnits}}
+        elif xUnits != '' and yUnits == '':
+            my_dict = {'Terminal Velocity' :{'':'$v_\mathrm{t} =$', 'Value': '{:0.2ug}'.format(v), 'Units': '1/' + xUnits},
+              'Time Constant':{'':'$\tau =$', 'Value': '{:0.2ug}'.format(T), 'Units': yUnits}}
+        elif xUnits == '' and yUnits != '':
+            my_dict = {'Terminal Velocity' :{'':'$v_\mathrm{t} =$', 'Value': '{:0.2ug}'.format(v), 'Units': yUnits},
+              'Time Constant':{'':'$\tau =$', 'Value': '{:0.2ug}'.format(T), 'Units': yUnits}}
+        else:
+            my_dict = {'Terminal Velocity' :{'':'$v_\mathrm{t} =$', 'Value': '{:0.2ug}'.format(v)},
+              'Time Constant':{'':'$\tau =$', 'Value': '{:0.2ug}'.format(T)}}
+
+        # Display the table
+        df = pd.DataFrame(my_dict)
+        display(df.transpose())
+                
+        # Call the Scatter function to create a scatter plot.
+        fig = Scatter(xData, yData, yErrors, xlabel, ylabel, xUnits, yUnits, False, False)
+        
+        # Determine the x-range.  Used to determine the x-values needed to produce the best-fit line.
+        if np.min(xData) > 0:
+            xmin = 0.9*np.min(xData)
+        else:
+            xmin = 1.1*np.min(xData)
+        if np.max(xData) > 0:
+            xmax = 1.1*np.max(xData)
+        else:
+            xmax = 0.9*np.max(xData)
+
+        # Plot the best-fit line...
+        xx = np.arange(xmin, xmax, (xmax-xmin)/5000)
+        # Generate the best-fit line. 
+        fitFcn = Vterm*Tau*((xx/Tau) - 1 + np.exp(-xx/Tau))
+
+        plt.plot(xx, fitFcn, 'k-')
+
+        # Show the final plot.
+        plt.show()
+    return Vterm, Tau, errVterm, errTau, fig
     
         
 ###############################################################################
@@ -781,10 +894,10 @@ def HistOverlay(dataArray, nbins = 10, xlabel = 'x-axis', xUnits = '',  normaliz
 
 ###############################################################################
 # Import Image & Add a Caption                                                #
-# - modified 20220607                                                         #
+# - modified 20220711                                                         #
 ###############################################################################        
 # Start the 'Import Image' function.
-def ImportImage(filename, caption = '', rotation = 0):
+def ImportImage(filename, caption = '', size = 5, rotation = 0):
     from os.path import exists as file_exists
     fig = ''
     if filename.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.eps')) == False:
@@ -799,7 +912,7 @@ def ImportImage(filename, caption = '', rotation = 0):
         display(html_print(cstr('The rotational angle must be a float or integer.  It represents the rotation angle in degrees.', color = 'magenta')))
     else:
         from PIL import Image
-        fig = plt.figure(figsize=(5, 5), dpi=100) # create a square figure.
+        fig = plt.figure(figsize=(size, size), dpi=100) # create a square figure.
         img = Image.open(filename) # Open the file
         img = img.rotate(rotation, expand = 1) # Rotate the file.
         plt.imshow(img)

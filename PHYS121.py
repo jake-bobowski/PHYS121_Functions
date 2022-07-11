@@ -620,7 +620,7 @@ def Charging(xData, yData, yErrors = [], xlabel = 'x-axis', ylabel = 'y-axis', x
     
 
 ###############################################################################
-# Magnetic Braking Nonlinear Fits                                       #
+# Magnetic Braking Nonlinear Fits                                             #
 # - modified 20220710                                                         #
 ############################################################################### 
 # Start the 'Braking' function.

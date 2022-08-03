@@ -825,7 +825,7 @@ def Statistics(data, nbins = 10, xlabel = 'x-axis', xUnits = '', normalized = Fa
 
 ###############################################################################
 # Overlay Multiple Histograms                                                 #
-# - modified 20220529                                                         #
+# - modified 20220801                                                         #
 ###############################################################################        
 # Start the 'HistOverlay' function.
 def HistOverlay(dataArray, nbins = 10, xlabel = 'x-axis', xUnits = '',  normalized = True, transparency = 0.75):
@@ -866,10 +866,6 @@ def HistOverlay(dataArray, nbins = 10, xlabel = 'x-axis', xUnits = '',  normaliz
         binwidth = (np.max(tot) - np.min(tot))/nbins
         boundaries = np.arange(np.min(tot), np.max(tot) + binwidth, binwidth)
         
-        # Perpare a squre figure
-        #fig = plt.figure(figsize=(5, 5), dpi=100)
-        #ax = fig.add_subplot(111)
-        
         # Plot the histograms and store the outputs in lists.
         countsArray = []
         centresArray = []
@@ -888,6 +884,79 @@ def HistOverlay(dataArray, nbins = 10, xlabel = 'x-axis', xUnits = '',  normaliz
         ax = fig.add_subplot(111)
 
         plt.hist(dataArray, bins = boundaries, edgecolor='k', density = normalized)
+
+        # Add units if they were provided.
+        if xUnits != '':
+            xlabel = xlabel + ' (' + xUnits + ')'
+            
+        # Format and show the plot.
+        plt.xlabel(xlabel)
+        if normalized == True:
+            plt.ylabel('Normalized Counts')
+        else:
+            plt.ylabel('Counts')
+        ax.set_aspect(1.0/ax.get_data_ratio(), adjustable='box') # Make the plot square
+        plt.show()
+    return countsArray, centresArray, fig
+
+
+###############################################################################
+# Overlap Multiple Histograms                                                 #
+# - modified 20220801                                                         #
+###############################################################################        
+# Start the 'HistOverlap' function.
+def HistOverlap(dataArray, nbins = 10, xlabel = 'x-axis', xUnits = '',  normalized = True, transparency = 0.75):
+    countsArray = ''
+    centresArray = ''
+    fig = ''
+    if len(dataArray)==0:
+        display(html_print(cstr("The 'dataArray' list must not be empty.", color = 'magenta')))
+    elif all(isinstance(x, list) or type(x).__module__ == np.__name__ for x in dataArray) != True: # Is dataArray a list of lists or arrays?
+        display(html_print(cstr("The 'dataArray' must be a list of lists.", color = 'magenta')))
+    elif isinstance(nbins, int) == False or nbins < 0:
+        display(html_print(cstr("'nbins' must be a positive integer.", color = 'magenta')))
+    elif isinstance(xlabel, str) == False:
+        display(html_print(cstr("'xlabel' must be a string.", color = 'magenta')))
+    elif isinstance(xUnits, str) == False:
+        display(html_print(cstr("'xUnits' must be a string.", color = 'magenta')))
+    elif normalized != True and normalized != False:
+        display(html_print(cstr("The 'normalized' parameter must be set to either True or False.", color = 'magenta')))
+    elif isinstance(transparency, int) == False and isinstance(transparency, float) == False:
+        display(html_print(cstr("The 'transparency' parameter must be a number between 0 (completely transparent) and 1 (opaque).", color = 'magenta')))
+    elif transparency < 0 or transparency > 1:
+        display(html_print(cstr("The 'transparency' parameter must be a number between 0 (completely transparent) and 1 (opaque).", color = 'magenta')))
+    else:
+        # Check to see if dataArray is a numpy array.  It it is, convert to a list.
+        if  type(dataArray).__module__ == np.__name__:
+            dataArray = dataArray.tolist()
+        # Check to see if the elements of dataArray are numpy arrays.  If they are, convert to lists
+        for i in range(len(dataArray)):
+            if  type(dataArray[i]).__module__ == np.__name__:
+                    dataArray[i] = dataArray[i].tolist()
+        # Generate a sequence of colours used to plot the the multiple histograms.
+        colour = iter(cm.rainbow(np.linspace(0, 1, len(dataArray))))
+        tot = sum(dataArray, []) # Combine the list of lists into a single large list
+        if all(isinstance(x, (int, float)) for x in tot) != True:
+            display(html_print(cstr('All elements of the provided data must be integers or floats.', color = 'magenta')))
+            return countsArray, centresArray, fig
+        # Calculate the boundaries of the histogram bins
+        binwidth = (np.max(tot) - np.min(tot))/nbins
+        boundaries = np.arange(np.min(tot), np.max(tot) + binwidth, binwidth)
+        
+        # Perpare a squre figure
+        fig = plt.figure(figsize=(5, 5), dpi=100)
+        ax = fig.add_subplot(111)
+
+        # Plot the histograms and store the outputs in lists.
+        countsArray = []
+        centresArray = []
+        for i in range(len(dataArray)): 
+            c = next(colour)
+            c[3] = transparency
+            counts, edges, patches = plt.hist(dataArray[i], bins = boundaries, fc = c, edgecolor='k', density = normalized);
+            centres = edges[0:len(counts)] + binwidth/2
+            countsArray.append(counts)
+            centresArray.append(centres)
 
         # Add units if they were provided.
         if xUnits != '':

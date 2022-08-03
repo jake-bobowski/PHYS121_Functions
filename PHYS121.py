@@ -107,7 +107,7 @@ def eParse(num, places):
 def Scatter(xData, yData, yErrors = [], xlabel = 'x-axis', ylabel = 'y-axis', xUnits = '', yUnits = '', fill = False, show = True):
     fig = ''
     # Check that the lengths of the inputs are all the same.  Check that the other inputs are strings.
-    if len(xData) != len(yData):
+    if len(xData) != len(yData) and xData != []:
         display(html_print(cstr('The length of xData (' + str(len(xData)) + ') is not equal to the length of yData (' + str(len(yData)) + ').', color = 'magenta')))
     elif all(isinstance(x, (int, float)) for x in xData) != True: # Is dataArray a list of lists or arrays?
         display(html_print(cstr("The elements of 'xData' must be integers or floats.", color = 'magenta')))
@@ -134,6 +134,10 @@ def Scatter(xData, yData, yErrors = [], xlabel = 'x-axis', ylabel = 'y-axis', xU
     else:
         fig = plt.figure(figsize=(5, 5), dpi=100) # create a square figure.
         ax = fig.add_subplot(111)
+        if xData == []:
+            xData = np.arange(1, len(yData) + 1, 1)
+            xlabel = 'trial number'
+            xUnits = ''
         if len(yErrors) == 0:
             # plot without error bars
             plt.plot(xData, yData, 'ko', markersize = 6,\
@@ -863,20 +867,28 @@ def HistOverlay(dataArray, nbins = 10, xlabel = 'x-axis', xUnits = '',  normaliz
         boundaries = np.arange(np.min(tot), np.max(tot) + binwidth, binwidth)
         
         # Perpare a squre figure
-        fig = plt.figure(figsize=(5, 5), dpi=100)
-        ax = fig.add_subplot(111)
+        #fig = plt.figure(figsize=(5, 5), dpi=100)
+        #ax = fig.add_subplot(111)
         
         # Plot the histograms and store the outputs in lists.
         countsArray = []
         centresArray = []
+        fig = plt.figure()
         for i in range(len(dataArray)): 
             c = next(colour)
             c[3] = transparency
-            counts, edges, patches = plt.hist(dataArray[i], bins = boundaries, fc = c, edgecolor='k', density = normalized)
+            counts, edges, patches = plt.hist(dataArray[i], bins = boundaries, fc = c, edgecolor='k', density = normalized);
             centres = edges[0:len(counts)] + binwidth/2
             countsArray.append(counts)
-            centresArray.append(centres)           
-        
+            centresArray.append(centres)
+        plt.close(fig)
+
+        # Perpare a squre figure
+        fig = plt.figure(figsize=(5, 5), dpi=100)
+        ax = fig.add_subplot(111)
+
+        plt.hist(dataArray, bins = boundaries, edgecolor='k', density = normalized)
+
         # Add units if they were provided.
         if xUnits != '':
             xlabel = xlabel + ' (' + xUnits + ')'

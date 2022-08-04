@@ -48,7 +48,7 @@ def install_and_import(package):
         importlib.import_module(package)
     except ImportError:
         import pip
-        pip.main(['install', package])
+        pip.main(['install', '--user', package])
     finally:
         globals()[package] = importlib.import_module(package)
 
@@ -1010,6 +1010,8 @@ def ImportImage(filename, caption = '', size = 5, rotation = 0):
 ###############################################################################       
 # Check to see if ipysheet is installed.
 def Spreadsheet(csvName):
+    import importlib.util
+    import sys
     if isinstance(csvName, str) == False:
         display(html_print(cstr("'csvName' must be a string.", color = 'magenta')))
     else:
@@ -1041,7 +1043,8 @@ def TrackerImport(filename):
         del lines[0] # delete the first line
 
         lines[0] = lines[0][::-1] # reverse the first row
-        lines[0] = lines[0].replace(',', '', 1) # remove the first comma from the first row
+        if lines[0][1] == ',':
+            lines[0] = lines[0].replace(',', '', 1) # remove the first comma from the first row
         lines[0] = lines[0][::-1] # put the first row back in its original order
 
         cnt = lines[0].count(",")
@@ -1064,9 +1067,9 @@ def TrackerImport(filename):
 
 ###############################################################################
 # Play a Youtube Video in Jupyter                                             #
-# - modified 20220803                                                         #
+# - modified 20220804                                                         #
 ###############################################################################        
-# Start the 'TrackerImport' function.
+# Start the 'Youtube' function.
 def YouTube(video):
     if isinstance(video, str) == False:
         display(html_print(cstr("'video' must be a string.", color = 'magenta')))

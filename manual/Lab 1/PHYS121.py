@@ -1017,3 +1017,59 @@ def Spreadsheet(csvName):
         import data_entry
         data_entry.sheet(csvName)
     return
+
+
+###############################################################################
+# Import Data from Tracker                                                    #
+# - modified 20220804                                                         #
+###############################################################################        
+# Start the 'TrackerImport' function.
+def TrackerImport(filename):
+    import os
+
+    if isinstance(filename, str) == False:
+        display(html_print(cstr("'filename' must be a string.", color = 'magenta')))
+        return
+    elif os.path.isfile(filename) == False: 
+        display(html_print(cstr(filename + " doesn't exist.", color = 'magenta')))
+        return
+    else:
+        a_file = open(filename, "r")
+        lines = a_file.readlines() # get list of lines
+        a_file.close()
+
+        del lines[0] # delete the first line
+
+        lines[0] = lines[0][::-1] # reverse the first row
+        lines[0] = lines[0].replace(',', '', 1) # remove the first comma from the first row
+        lines[0] = lines[0][::-1] # put the first row back in its original order
+
+        cnt = lines[0].count(",")
+        text = ''
+        for i in range(cnt):
+            text += ','
+        lines.insert(1, text + '\n') # insert a new second line
+    
+        name = os.path.splitext(filename)[0]
+        new_file = open(name + '.csv', "w+") # open a new file with the same name, but with a csv extension
+
+        for line in lines:
+            new_file.write(line) # write the new data to the new file
+
+        new_file.close()
+
+        Spreadsheet(name)
+    return
+
+
+###############################################################################
+# Play a Youtube Video in Jupyter                                             #
+# - modified 20220803                                                         #
+###############################################################################        
+# Start the 'TrackerImport' function.
+def YouTube(video):
+    if isinstance(video, str) == False:
+        display(html_print(cstr("'video' must be a string.", color = 'magenta')))
+        return
+    from IPython.lib.display import YouTubeVideo
+    return YouTubeVideo(video)

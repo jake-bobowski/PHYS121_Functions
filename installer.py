@@ -3,7 +3,7 @@ def Check():
     import sys
     import subprocess
     cnt = 0
-    # For illustrative purposes.
+    
     package_names = ['ipysheet', 'uncertainties', 'httpimport']
     for name in package_names:
         spec = importlib.util.find_spec(name)

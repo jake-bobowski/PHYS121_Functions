@@ -24,6 +24,7 @@ The following functions are currently aavailable:
 * Data entry using a spreadsheet-like environment
 * Import data obtained from a Tracker video analysis
 * Play a YouTube video within a Jupyter notebook
+* Produce a false-colour plot of electric potential & show the corresponding electric field map
 
 Example implementations of the various fuunctions are shown in the Jupyter notebook file 'PHYS_121_Functions_demonstration.ipynb' provided in this repository.
 

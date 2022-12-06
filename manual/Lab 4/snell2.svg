@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 26.1.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 864 864" style="enable-background:new 0 0 864 864;" xml:space="preserve">
+<style type="text/css">
+	.st0{opacity:0.57;fill:#29ABE2;stroke:#000000;stroke-width:1.1568;stroke-miterlimit:10;}
+	.st1{fill:none;stroke:#000000;stroke-width:3;stroke-linecap:square;stroke-miterlimit:10;}
+	.st2{fill:none;stroke:#FF0000;stroke-width:5;stroke-miterlimit:10;}
+	.st3{fill:none;stroke:#000000;stroke-width:5;stroke-miterlimit:10;stroke-dasharray:16,10;}
+	.st4{fill:none;}
+	.st5{fill:#231F20;}
+	.st6{font-family:'MyriadPro-Regular';}
+	.st7{font-size:54px;}
+	.st8{font-size:34px;}
+	.st9{font-size:55px;}
+</style>
+<path class="st0" d="M807.1,343.9c0,207.2-167.9,375.1-375.1,375.1S56.9,551.1,56.9,343.9H807.1z"/>
+<line class="st1" x1="299" y1="676.5" x2="316.3" y2="682.6"/>
+<line class="st2" x1="432" y1="343.9" x2="252.2" y2="793.6"/>
+<line class="st2" x1="431.4" y1="344.8" x2="680.3" y2="95.6"/>
+<line class="st3" x1="432" y1="180.8" x2="432" y2="526.8"/>
+<rect x="380.4" y="470.7" class="st4" width="44.2" height="43.3"/>
+<text transform="matrix(1 0 0 1 380.366 508.9942)"><tspan x="0" y="0" class="st5 st6 st7">θ</tspan><tspan x="28.8" y="0" class="st5 st6 st8">2</tspan></text>
+<rect x="435.3" y="259.8" class="st4" width="43.6" height="42.7"/>
+<text transform="matrix(1 0 0 1 435.285 298.1679)"><tspan x="0" y="0" class="st5 st6 st7">θ</tspan><tspan x="28.8" y="0" class="st5 st6 st8">1</tspan></text>
+<line class="st1" x1="316.7" y1="682.7" x2="311.2" y2="698.2"/>
+<rect x="662.6" y="278.4" class="st4" width="151.2" height="131"/>
+<text transform="matrix(1 0 0 1 662.6081 317.4669)" class="st5 st6 st9">n</text>
+<text transform="matrix(0.583 0 0 0.583 693.1325 328.7824)" class="st5 st6 st9">1</text>
+<rect x="666.4" y="361.8" class="st4" width="151.2" height="131"/>
+<text transform="matrix(1 0 0 1 666.402 400.8983)" class="st5 st6 st9">n</text>
+<text transform="matrix(0.583 0 0 0.583 696.9265 412.2137)" class="st5 st6 st9">2</text>
+</svg>
